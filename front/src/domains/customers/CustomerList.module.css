@@ -1,0 +1,18 @@
+.holder {
+    width: 1000px;
+}
+
+.header {
+ 
+}
+
+.hederRow{
+    margin: 24px 0  64px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.table {
+    width: 1000px;
+}
