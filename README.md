@@ -1,3 +1,9 @@
+First install dependencies at root folder, front and server -  by running follow command:
+
+```
+npm install
+```
+
 Run app (both server and front):
 
 ```

@@ -14,13 +14,11 @@ function* getCustomers() {
 }
 
 function* deleteUser(action) {
-  console.log("action", action);
   const { customerId } = action.payload;
-  console.log("customerId", customerId);
   try {
-    const deleteresult = yield call(api.getusers, customerId);
-    if (deleteresult === 200) {
-      yield put(customerActions.fetch_customer_delete_success(customerId));
+    const deleteresult = yield call(api.deleteUserById, customerId);
+    if (deleteresult.status === 200) {
+      return yield put(customerActions.FETCH_CUSTOMER_DELETE_SUCCESS(customerId));
     }
   } catch (error) {
     console.log(error);
@@ -28,7 +26,23 @@ function* deleteUser(action) {
   }
 }
 
+function* addCustomer(action) {
+  const { customer } = action.payload;
+  try {
+    const addCustomerResult = yield call(api.addCustomer, customer);
+    console.log(addCustomerResult.data)
+    if (addCustomerResult.status === 200) yield put(customerActions.FETCH_CUSTOMER_ADD_SUCCESS(addCustomerResult.data));
+
+  } catch (error) {
+    console.log(error);
+    //to do error handler
+  }
+}
+
+
+
 export default function* customersWatcher() {
   yield takeLatest(customerTypes.FETCH_CUSTOMERS_START, getCustomers);
   yield takeLatest(customerTypes.FETCH_CUSTOMER_DELETE_START, deleteUser);
+  yield takeLatest(customerTypes.FETCH_CUSTOMER_ADD_START, addCustomer);
 }

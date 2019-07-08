@@ -19,9 +19,21 @@ const FETCH_CUSTOMER_DELETE_SUCCESS = customerId => ({
   payload: { customerId }
 });
 
+const FETCH_CUSTOMER_ADD_START = customer => ({
+  type: types.FETCH_CUSTOMER_ADD_START,
+  payload: { customer }
+});
+
+const FETCH_CUSTOMER_ADD_SUCCESS = customer => ({
+  type: types.FETCH_CUSTOMER_ADD_SUCCESS,
+  payload: { customer }
+})
+
 export default {
   FETCH_CUSTOMERS_SUCCESS,
   FETCH_CUSTOMERS_START,
   FETCH_CUSTOMER_DELETE_START,
-  FETCH_CUSTOMER_DELETE_SUCCESS
+  FETCH_CUSTOMER_DELETE_SUCCESS,
+  FETCH_CUSTOMER_ADD_START,
+  FETCH_CUSTOMER_ADD_SUCCESS
 };

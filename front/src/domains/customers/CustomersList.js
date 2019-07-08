@@ -5,12 +5,14 @@ import CustomerAddModal from "./CustomerAddModal";
 import customerActions from "./customerActions";
 import styles from "./CustomerList.module.css";
 
+
 const Customerslist = ({ customers, getCustomers, deleteById }) => {
   useEffect(() => {
     getCustomers();
   }, [customers.length, getCustomers]);
 
   const [showModal, setModal] = useState(false);
+  let [customersQuantity,] = useState(0);
 
   const handleCloseModal = () => {
     setModal(false);
@@ -48,7 +50,7 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
           {customers.length > 0 &&
             customers.map(customer => (
               <tr key={customer.id}>
-                <td className={styles.tableItem}>{customer.id}</td>
+                <td className={styles.tableItem}>{customersQuantity += 1}</td>
                 <td className={styles.tableItem}>{customer.name}</td>
                 <td className={styles.tableItem}>{customer.address}</td>
                 <td className={styles.tableItem}>{customer.phone}</td>
