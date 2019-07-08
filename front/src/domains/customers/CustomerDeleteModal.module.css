@@ -1,0 +1,13 @@
+.customerDetails{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.customerDetailsItem:not(:last-child) {
+    margin-right: 24px;
+}
+
+.customerDetailsItem {
+    font-size: 1.4rem;
+}

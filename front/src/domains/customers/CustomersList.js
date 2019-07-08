@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Button } from "react-bootstrap";
 import CustomerAddModal from "./CustomerAddModal";
+import CustomerDeleteModal from './CustomerDeleteModal';
 import customerActions from "./customerActions";
 import styles from "./CustomerList.module.css";
 
@@ -11,29 +12,42 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
     getCustomers();
   }, [customers.length, getCustomers]);
 
-  const [showModal, setModal] = useState(false);
+  const [showAddModal, setAddModal] = useState(false);
   let [customersQuantity,] = useState(0);
 
   const handleCloseModal = () => {
-    setModal(false);
+    setAddModal(false);
   };
 
   const handleShowModal = () => {
-    setModal(true);
+    setAddModal(true);
   };
 
   const onCustomerAdd = e => {
     e.preventDefault();
-    console.log("onCustomerAdd");
     handleCloseModal();
   };
+
+  const [userForDeletingId, setUserForDeletingId] = useState(null);
+  const [showDeleteConfirm, setDeleteConfirm] = useState(false);
+
+  const handleShowDeleteConfirm = id => {
+    setUserForDeletingId(id);
+    setDeleteConfirm(true);
+  }
+
+  const handleCloseDeleteConfirm = () => {
+    setDeleteConfirm(false)
+  }
+
+
 
   return (
     <div className={styles.holder}>
       <div className={styles.hederRow}>
         <h1>Customers list</h1>
         <Button variant="outline-secondary" onClick={handleShowModal}>
-          Create
+          CREATE
         </Button>
       </div>
       <Table bordered hover className={styles.table}>
@@ -57,9 +71,9 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
                 <td className={styles.tableItem}>
                   <Button
                     variant="outline-secondary"
-                    onClick={() => deleteById(customer.id)}
+                    onClick={() => handleShowDeleteConfirm(customer.id)}
                   >
-                    Delete
+                    DELETE
                   </Button>
                 </td>
               </tr>
@@ -67,10 +81,16 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
         </tbody>
       </Table>
       <CustomerAddModal
-        showModal={showModal}
+        showModal={showAddModal}
         onClose={handleCloseModal}
         handleAddCustomer={onCustomerAdd}
       />
+      <CustomerDeleteModal
+        showModal={showDeleteConfirm}
+        onClose={handleCloseDeleteConfirm}
+        userId={userForDeletingId}
+        handleDelete={deleteById}
+      ></CustomerDeleteModal>
     </div>
   );
 };

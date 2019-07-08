@@ -30,7 +30,6 @@ function* addCustomer(action) {
   const { customer } = action.payload;
   try {
     const addCustomerResult = yield call(api.addCustomer, customer);
-    console.log(addCustomerResult.data)
     if (addCustomerResult.status === 200) yield put(customerActions.FETCH_CUSTOMER_ADD_SUCCESS(addCustomerResult.data));
 
   } catch (error) {
