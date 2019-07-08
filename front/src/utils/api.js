@@ -1,6 +1,12 @@
 import axios from "axios";
 import apiConfig from "../configs/apiConfigs";
 
+const HEADERS = {
+  headers: {
+    ContentType: 'application/json;charset=UTF-8',
+  }
+}
+
 const getUsers = () => {
   try {
     return axios.get(apiConfig.CUSTOMERS)
@@ -36,11 +42,7 @@ const addCustomer = customer => {
     return axios.post(
       apiConfig.CUSTOMERS,
       { name, address, phone },
-      {
-        headers: {
-          ContentType: 'application/json;charset=UTF-8',
-        }
-      }
+      HEADERS
     )
       .then(resp => {
         return resp
@@ -55,4 +57,23 @@ const addCustomer = customer => {
   }
 }
 
-export default { getUsers, deleteUserById, addCustomer };
+const editCustomer = customer => {
+  const { name, address, phone, id } = customer;
+  try {
+    return axios.put(`${apiConfig.CUSTOMERS}/${id}`,
+      { name, address, phone }, HEADERS
+    )
+      .then(resp => {
+        return resp
+      })
+  }
+  catch (error) {
+    console.log("Error at deleteUserById api:", error);
+    //TO DO error handler
+  }
+}
+
+export default {
+  getUsers, deleteUserById,
+  addCustomer, editCustomer,
+};

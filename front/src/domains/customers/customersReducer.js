@@ -6,6 +6,8 @@ const customerReducer = (state = [], { type, payload }) => {
       return payload.customers;
     case customerTypes.FETCH_CUSTOMER_DELETE_SUCCESS:
       return state.filter(customer => customer.id !== payload.customerId);
+    case customerTypes.FETCH_CUSTOMER_EDIT_SUCCESS:
+      return state.map(customer => customer.id !== payload.customer.id ? customer : payload.customer)
     case customerTypes.FETCH_CUSTOMER_ADD_SUCCESS:
       return [...state, payload.customer];
     default:

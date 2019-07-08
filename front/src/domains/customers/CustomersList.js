@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Table, Button } from "react-bootstrap";
+
 import CustomerAddModal from "./CustomerAddModal";
 import CustomerDeleteModal from './CustomerDeleteModal';
+import CustomerEditModal from './CustomerEditModal';
+
 import customerActions from "./customerActions";
 import styles from "./CustomerList.module.css";
 
@@ -12,35 +15,49 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
     getCustomers();
   }, [customers.length, getCustomers]);
 
+  //Customer add 
   const [showAddModal, setAddModal] = useState(false);
+
   let [customersQuantity,] = useState(0);
 
   const handleCloseModal = () => {
     setAddModal(false);
   };
-
   const handleShowModal = () => {
     setAddModal(true);
   };
-
   const onCustomerAdd = e => {
     e.preventDefault();
     handleCloseModal();
   };
 
+  //Customer delete
   const [userForDeletingId, setUserForDeletingId] = useState(null);
+
   const [showDeleteConfirm, setDeleteConfirm] = useState(false);
 
   const handleShowDeleteConfirm = id => {
     setUserForDeletingId(id);
     setDeleteConfirm(true);
   }
-
   const handleCloseDeleteConfirm = () => {
     setDeleteConfirm(false)
   }
 
+  //customer edit
 
+  const [customerForEditingId, setCustomerForEditingId] = useState(null);
+
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const handleCloseEditCustomerModal = () => {
+    setShowEditModal(false);
+    setCustomerForEditingId(null)
+  };
+  const handleShowEditCustomerModal = id => {
+    setCustomerForEditingId(id)
+    setShowEditModal(true);
+  };
 
   return (
     <div className={styles.holder}>
@@ -72,8 +89,16 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
                   <Button
                     variant="outline-secondary"
                     onClick={() => handleShowDeleteConfirm(customer.id)}
+                    className={styles.buttonsActions}
                   >
                     DELETE
+                  </Button>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.buttonsActions}
+                    onClick={() => handleShowEditCustomerModal(customer.id)}
+                  >
+                    EDIT
                   </Button>
                 </td>
               </tr>
@@ -91,6 +116,11 @@ const Customerslist = ({ customers, getCustomers, deleteById }) => {
         userId={userForDeletingId}
         handleDelete={deleteById}
       ></CustomerDeleteModal>
+      <CustomerEditModal
+        showModal={showEditModal}
+        onClose={handleCloseEditCustomerModal}
+        userId={customerForEditingId}
+      ></CustomerEditModal>
     </div>
   );
 };

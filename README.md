@@ -1,14 +1,18 @@
-First install dependencies at root folder, front and server -  by running follow command:
+First install dependencies at root of this folder, at front folder and  at server folder -  by running follow command:
 
 ```
 npm install
 ```
 
-Run app (both server and front):
+Then run app (both server and front):
 
 ```
 npm start
 ```
+
+This app build with usage: react, redux, redux-saga, react-bootstrap, react-helmet
+
+****
 
 # Общие требования
 
