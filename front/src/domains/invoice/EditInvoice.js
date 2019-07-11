@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Button, } from "react-bootstrap";
+import { Button, InputGroup, FormControl } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import CustomerSelect from "../../components/customer-select/CustomerSelect";
 import ProductsSelect from '../../components/products-select/ProductsSelect';
 import ProductsSelectedTable from '../../components/products-selected/ProductsSelectedTable';
+import invoicesActions from './invoicesActions';
 import styles from './EditInvoice.module.css';
-
+import routes from '../../configs/routes';
 
 const INITIAL_STATE = {
   customer: "",
@@ -21,6 +22,15 @@ const INITIAL_STATE = {
 class EditInvoice extends Component {
   state = { ...INITIAL_STATE };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.cart.productsSelectedIds !== this.state.cart.productsSelectedIds
+      || prevState.discount !== this.state.discount) {
+      console.log()
+      this.countTotalPrice('componentDidUpdate countTotalPrice')
+    }
+
+  }
+
   handleInput = ({ target }) => {
     const { name, value } = target;
     this.setState({ [name]: value });
@@ -30,13 +40,10 @@ class EditInvoice extends Component {
     const { product, cart: { productsSelectedIds } } = this.state;
     const { allProductsList } = this.props;
     const foundProduct = allProductsList.find(currProduct => currProduct.name === product);
-    console.log("foundProduct", foundProduct);
     const ifExistAtSelected = productsSelectedIds.includes(foundProduct.id);
-    console.log("ifExistAtSelected", ifExistAtSelected);
 
     if (!ifExistAtSelected) {
       const { id } = foundProduct;
-      //const { cart } = this.state;
       this.setState(prevState => ({
         cart: {
           productsSelectedIds: [...prevState.cart.productsSelectedIds, id],
@@ -45,14 +52,11 @@ class EditInvoice extends Component {
       }))
     }
     if (ifExistAtSelected) {
-      console.log('ifExistAtSelected');
       return alert("This product is already at list of selected, just change quantity at table below");
     }
   }
 
   handleAddQuantityOfProducts = (id, qty) => {
-    console.log("handleAddQuantityOfProducts [id]: ", id);
-    console.log("handleAddQuantityOfProducts [qty]: ", qty)
     this.setState(prevState => ({
       ...prevState,
       cart: {
@@ -62,27 +66,65 @@ class EditInvoice extends Component {
     }))
   }
 
-  // handleAddProductToSelected = () => {
-  //   console.log('handleAddProductToSelected');
-  //   const { allProductsList } = this.props;
-  //   const { product } = this.state;
-  //   const { }
-  //   const ifExistAtSelected = productsSelected.find(currProd => currProd.name === product);
-  //   if (ifExistAtSelected) {
-  //     console.log('ifExistAtSelected');
-  //     alert("This product is already at list of selected, just change quantity at table below");
-  //     return
-  //   }
-  //   const foundProduct = allProductsList.find(currProduct => currProduct.name === product);
-  //   console.log("foundProduct", foundProduct);
-  //   this.setState(prevState => ({ productsSelected: [...prevState.productsSelected, foundProduct] }))
-  // }
+  countTotalPrice = () => {
+    const { allProductsList } = this.props;
+    const { cart: { amount, productsSelectedIds }, discount } = this.state;
+
+    let discountInPercent = discount !== "" ? discount / 100 : 0;
+
+    const total = productsSelectedIds.reduce((accum, product) => {
+      const found = allProductsList.find(curr => curr.id === product);
+      accum += amount[product] * found.price;
+      return accum;
+    }, 0);
+
+    const totalWithDiscount = (total - (total * discountInPercent));
+
+    this.setState(prevState => ({
+      ...prevState,
+      total: totalWithDiscount.toFixed(2),
+    }))
+  }
+
+  handleRemoveProductFromSelected = id => {
+    const { [id]: _, ...restAmount } = this.state.cart.amount;
+    const { productsSelectedIds } = this.state.cart;
+
+    const filteredProductsSelectedIds = productsSelectedIds.filter(curr => curr !== id)
+
+    this.setState(prevState => ({
+      ...prevState,
+      cart: {
+        productsSelectedIds: [...filteredProductsSelectedIds],
+        amount: { ...restAmount }
+      }
+    }))
+  }
+
+  handleSaveInvoice = () => {
+    console.log('handleSaveInvoice');
+    const { customersList, handleAddInvoice, history } = this.props;
+    const { customer, discount, total } = this.state;
+    const customerFound = customersList.find(currCustomer => currCustomer.name === customer);
+    const { id: customer_id } = customerFound;
+    console.log("customerId - ", customer_id);
+    const invoiceToSave = { discount, total, customer_id };
+    handleAddInvoice(invoiceToSave);
+    history.push(routes.INVOICES_LIST);
+  }
+
 
   render() {
-    const { cart: { productsSelectedIds } } = this.state;
-    const { cart: { amount } } = this.state;
+    const { cart: { productsSelectedIds, amount }, total, discount } = this.state;
+    //const { cart: { amount }, discount } = this.state;
     return (
       <div className={styles.holder}>
+        <InputGroup style={{ width: "400px", marginBottom: "16px" }}>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="basic-addon1">Discount %</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl type="number" name="discount" value={discount} onChange={this.handleInput} />
+        </InputGroup>
         <CustomerSelect handleItemChange={this.handleInput} />
         <div className={styles.addProductsRow}>
           <ProductsSelect handleItemChange={this.handleInput}></ProductsSelect>
@@ -91,13 +133,27 @@ class EditInvoice extends Component {
             type="button" size="sm" className={styles.addProductBtn}
             onClick={this.handleAddProductToSelected}>
             ADD PRODUCT
-              </Button>
+          </Button>
         </div>
         <ProductsSelectedTable
           productsSelectedListIds={productsSelectedIds}
           amount={amount}
           handleAddQuantity={this.handleAddQuantityOfProducts}
+          handleRemoveProductFromSelected={this.handleRemoveProductFromSelected}
+          total={total}
         />
+        {productsSelectedIds && productsSelectedIds.length > 0 && (
+          <div className={styles.saveInvoiceBtnRow}>
+            <Button
+              variant="outline-secondary"
+              type="button" size="lg"
+              onClick={this.handleSaveInvoice}
+            >
+              SAVE
+          </Button>
+          </div>
+        )}
+
       </div>
     );
   }
@@ -105,6 +161,11 @@ class EditInvoice extends Component {
 
 const mstp = state => ({
   allProductsList: state.products,
-})
+  customersList: state.customers,
+});
 
-export default connect(mstp)(EditInvoice);
+const mdtp = {
+  handleAddInvoice: invoicesActions.FETCH_INVOICES_ADD_START
+}
+
+export default connect(mstp, mdtp)(EditInvoice);

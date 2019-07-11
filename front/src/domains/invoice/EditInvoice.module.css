@@ -17,3 +17,10 @@
     margin-bottom: 18px;
     margin-left: 32px;
 }
+
+.saveInvoiceBtnRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70vw;
+}

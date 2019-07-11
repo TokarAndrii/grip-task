@@ -4,19 +4,17 @@ import { Table, Button, Form, } from "react-bootstrap";
 import styles from './ProductsSelectedTable.module.css';
 
 const INITIAL_STATE = {
-    productNumeration: 1,
+    productNumeration: 0,
     productsSelectedList: []
 }
 
 class ProductsSelectedTable extends Component {
     state = { ...INITIAL_STATE }
-    //total = productsSelectedList.reduce((accum, product) => accum + product.price, 0)
 
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.productsSelectedListIds !== this.props.productsSelectedListIds) {
             const { allProductsList, productsSelectedListIds } = this.props;
             const foundArray = allProductsList.filter(product => productsSelectedListIds.includes(product.id) ? product : null);
-            console.log("foundArray", foundArray);
             this.setState({ productsSelectedList: [...foundArray] })
         }
     }
@@ -24,14 +22,16 @@ class ProductsSelectedTable extends Component {
     handleInput = (e, id) => {
         const { target } = e;
         const { name, value } = target;
-        console.log("name - ", name)
-        console.log("value - ", value);
         const { handleAddQuantity } = this.props;
-        console.log(id, ' - id')
         handleAddQuantity(name, value)
     }
+
+    onDelete = (id) => {
+        const { handleRemoveProductFromSelected, } = this.props;
+        handleRemoveProductFromSelected(id)
+    }
     render() {
-        const { handleRemoveProductFromSelected, handleAddQuantity, amount, } = this.props;
+        const { amount, total } = this.props;
         let { productNumeration, productsSelectedList } = this.state
         return (
             <div >
@@ -42,7 +42,7 @@ class ProductsSelectedTable extends Component {
                                 <th className={styles.tableItem}>#</th>
                                 <th className={styles.tableItem}>Name</th>
                                 <th className={styles.tableItem}>Price</th>
-                                <th className={styles.tableItem}>Qty</th>
+                                <th className={styles.tableItemQnty}>Qty</th>
                                 <th className={styles.tableItem}>Actions</th>
                             </tr>
                         </thead>
@@ -52,7 +52,7 @@ class ProductsSelectedTable extends Component {
                                     <td className={styles.tableItem}>{productNumeration += 1}</td>
                                     <td className={styles.tableItem}>{product.name}</td>
                                     <td className={styles.tableItem}>{product.price}</td>
-                                    <td className={styles.tableItem}>
+                                    <td className={styles.tableItemQnty}>
                                         <Form.Control
                                             type="number"
                                             name={product.id}
@@ -65,7 +65,7 @@ class ProductsSelectedTable extends Component {
                                             variant="outline-secondary"
                                             type="button"
                                             size="sm"
-                                            onClick={handleRemoveProductFromSelected}>
+                                            onClick={() => this.onDelete(product.id)}>
                                             REMOVE
                                         </Button>
                                     </td>
@@ -76,7 +76,7 @@ class ProductsSelectedTable extends Component {
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td className="total">Total:</td>
+                                <td className={styles.total}>Total: {total}</td>
                             </tr>
                         </tbody>
                     </Table>

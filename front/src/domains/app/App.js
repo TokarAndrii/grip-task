@@ -26,7 +26,10 @@ function App({ className }) {
             Customers
           </NavLink>
           <NavLink activeStyle={{ color: "White" }} to={routes.EDIT_INVOICE}>
-            Add/Edit invoice
+            Add invoice
+          </NavLink>
+          <NavLink activeStyle={{ color: "White" }} to={routes.INVOICES_LIST}>
+            Invoices list
           </NavLink>
         </header>
         <main>

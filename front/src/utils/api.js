@@ -88,10 +88,27 @@ const getAllProducts = () => {
   }
 }
 
+const addInvoice = invoice => {
+  try {
+    const { customer_id, discount, total } = invoice;
+    return axios.post(apiConfig.INVOICES, { customer_id, discount, total }, HEADERS)
+      .then(resp => {
+        return resp.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log("Error at addInvoice api:", error);
+    //TO DO error handler
+  }
+}
+
 export default {
   getUsers,
   deleteUserById,
   addCustomer,
   editCustomer,
   getAllProducts,
+  addInvoice,
 };

@@ -6,6 +6,11 @@
   .tableItem {
     text-align: left;
   }
+
+  .tableItemQnty {
+    text-align: left;
+    width: 150px;
+  }
   
   .total {
      display: flex;

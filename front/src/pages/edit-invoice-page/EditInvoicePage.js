@@ -3,14 +3,14 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import EditInvoice from "../../domains/invoice/EditInvoice";
 
-const EditInvoicePage = ({ className }) => {
+const EditInvoicePage = ({ className, history }) => {
   return (
     <div className={className}>
       <Helmet>
         <title>Edit invoice title</title>
       </Helmet>
-      <h1>Add/Edit invoice</h1>
-      <EditInvoice />
+      <h1>Add invoice</h1>
+      <EditInvoice history={history} />
     </div>
   );
 };
