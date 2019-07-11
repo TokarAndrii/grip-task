@@ -6,6 +6,7 @@ import routes from "../../configs/routes";
 
 import ProductsPage from "../../pages/products/Products";
 import CustomersPage from "../../pages/customers/Customers";
+import EditInvoicePage from "../../pages/edit-invoice-page/EditInvoicePage";
 
 function App({ className }) {
   return (
@@ -24,11 +25,18 @@ function App({ className }) {
           <NavLink activeStyle={{ color: "White" }} to={routes.CUSTOMERS}>
             Customers
           </NavLink>
+          <NavLink activeStyle={{ color: "White" }} to={routes.EDIT_INVOICE}>
+            Add invoice
+          </NavLink>
+          <NavLink activeStyle={{ color: "White" }} to={routes.INVOICES_LIST}>
+            Invoices list
+          </NavLink>
         </header>
         <main>
           <Switch>
             <Route path={routes.PRODUCTS} component={ProductsPage} />
             <Route path={routes.CUSTOMERS} component={CustomersPage} />
+            <Route path={routes.EDIT_INVOICE} component={EditInvoicePage} />
           </Switch>
         </main>
       </div>
