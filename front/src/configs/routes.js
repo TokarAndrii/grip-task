@@ -5,6 +5,7 @@ const EDIT_INVOICE = "/invoice-add";
 const INVOICES = "/invoices";
 const INVOICES_LIST = "/invoices-list";
 
+
 export default {
     INDEX,
     PRODUCTS,
