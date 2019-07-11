@@ -10,15 +10,16 @@ class CustomerSelect extends Component {
   }
 
   render() {
-    const { customersList, handleItemChange } = this.props;
+    const { customersList, handleItemChange, selected } = this.props;
     return (
       customersList &&
       customersList.length > 0 && (
-        <Form.Group controlId="exampleForm.ControlSelect1">
+        <Form.Group controlId="exampleForm.ControlSelect1" style={{ width: "400px" }}>
           <Form.Control as="select" name="customer" onChange={handleItemChange}>
             <option value="">Select customer:</option>
             {customersList.map(customer => (
-              <option key={customer.id} value={customer.name}>
+              <option key={customer.id} value={customer.name}
+                selected={customer.name === selected ? true : false}>
                 {customer.name}
               </option>
             ))}

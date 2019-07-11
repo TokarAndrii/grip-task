@@ -73,7 +73,25 @@ const editCustomer = customer => {
   }
 }
 
+const getAllProducts = () => {
+  try {
+    return axios.get(apiConfig.PRODUCTS)
+      .then(resp => {
+        return resp.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  } catch (error) {
+    console.log("Error at getAllProducts api:", error);
+    //TO DO error handler
+  }
+}
+
 export default {
-  getUsers, deleteUserById,
-  addCustomer, editCustomer,
+  getUsers,
+  deleteUserById,
+  addCustomer,
+  editCustomer,
+  getAllProducts,
 };

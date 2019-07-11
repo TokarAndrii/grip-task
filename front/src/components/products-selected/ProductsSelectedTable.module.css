@@ -1,0 +1,15 @@
+.table {
+    width: 1000px;
+    margin-top: 32px;
+  }
+  
+  .tableItem {
+    text-align: left;
+  }
+  
+  .total {
+     display: flex;
+     justify-content: flex-start;
+     align-items: center;
+  
+  }
