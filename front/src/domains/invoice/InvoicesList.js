@@ -41,11 +41,11 @@ const InvoicesList = ({
           <tbody>
             {invoicesList.map(invoice => (
               <tr key={invoice.id}>
-                <td>{(invoicesQuantity += 1)}</td>
-                <td>{getCustomerById(invoice.customer_id)}</td>
-                <td>{invoice.discount}</td>
-                <td>{invoice.total}</td>
-                <td>...</td>
+                <td className={styles.tableItem}>{(invoicesQuantity += 1)}</td>
+                <td className={styles.tableItem}>{getCustomerById(invoice.customer_id)}</td>
+                <td className={styles.tableItem}>{invoice.discount}</td>
+                <td className={styles.tableItem}>{invoice.total}</td>
+                <td className={styles.tableItem}>...</td>
               </tr>
             ))}
           </tbody>
